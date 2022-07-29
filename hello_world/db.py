@@ -1,12 +1,13 @@
 
-def read_names():
-    with open('db.txt') as f:
+def read_names(test=False):
+    filename = 'db.txt'
+    if test:
+        filename = 'hello_world/' + filename
+    with open(filename) as f:
         data = f.read().split('\n')
     return data
 
-def write_name(name):
+def write_name(name, test=False):
     if name == '':
         return False
-    with open('db.txt', 'a') as f:
-        f.write(f'{name}\n')
     return True

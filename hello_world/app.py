@@ -33,10 +33,10 @@ def lambda_handler(event, context):
 
         # Hello world endpoint
         if path == '/hello':
-            output = 'The local dev server is working!'
+            output = 'Lambda is working!'
 
         # Custom hello endpoint
-        elif path == '/customHello':
+        elif path == '/helloCustom':
             raise NotImplementedError()
 
         # Get names endpoint

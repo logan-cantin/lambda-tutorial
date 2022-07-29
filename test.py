@@ -22,13 +22,13 @@ if __name__ == "__main__":
 
     # Challenge 2
     result = requests.get(BASE_URL + '/hello')
-    if not (result.status_code == 200 and result.text == 'Hello, World!'):
+    if not (result.status_code == 200 and json.loads(result.text) == "Hello, World!"):
         failed(2, 'The endpoint does not return the string "Hello, World!".')
     passed(2)
 
     # Challenge 3
-    result = requests.get(BASE_URL + '/customHello', dict(name="Timmy"))
-    if not (result.status_code == 200 and result.txt == 'Hello, Timmy!'):
+    result = requests.get(BASE_URL + '/helloCustom', dict(name="Timmy"))
+    if not (result.status_code == 200 and json.loads(result.text) == 'Hello, Timmy!'):
         failed(3, 'The endpoint does not return the string "Hello, Timmy!" when passed the query string parameter "name=Timmy"')
     passed(3)
 
@@ -37,20 +37,20 @@ if __name__ == "__main__":
     if result.status_code != 200:
         failed(4, '/getNames failed (status code != 200)')
     names = json.loads(result.text)
-    if not (names == [x for x in sorted(db.read_names()) if x]):
+    if not (names == [x for x in sorted(db.read_names(True)) if x]):
         failed(4, '/getNames is not returning the names in alphabetical order, or it is not removing the empty names')
     passed(4)
 
     # Challenge 5
     for name in ['Jamiroquai', '']:
-        old_names = db.read_names()
-        result = requests.post(BASE_URL + '/addName', json=dict(name='Jamiroquai'))
+        old_names = db.read_names(True)
+        result = requests.post(BASE_URL + '/addName', json=dict(name=name))
         if result.status_code != 200:
-            failed(5, '/addName failed (status code != 200)')
-        if name and not (result.text == 'Success' and db.read_names[-2] == name):
-            failed(5, 'Add name did not add the data to the database or did not return "Success".')
-        elif (not name) and (not result.text == 'Failure'):
-            failed(5, 'Add name did not return "Failure" when it should have.')
+            failed(5, f'/addName {name} failed (status code != 200)')
+        if name and not (json.loads(result.text) == 'Success'):
+            failed(5, f'Add name "{name}" did not add the data to the database or did not return "Success".')
+        elif (not name) and (not json.loads(result.text) == 'Failure'):
+            failed(5, f'Add name "{name}" did not return "Failure" when it should have.')
     passed(5)
 
     print("Congratulations! Your api passed.")
