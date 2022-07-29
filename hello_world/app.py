@@ -28,23 +28,33 @@ def lambda_handler(event, context):
     try:
 
         path = event['path']
-
+        queryParams = event["queryStringParameters"]
         output = ''
 
         # Hello world endpoint
         if path == '/hello':
-            output = 'Lambda is working!'
+            output = 'Hello, World!'
 
         # Custom hello endpoint
         elif path == '/helloCustom':
-            raise NotImplementedError()
-
+            output = "Hello, " + queryParams["name"] + "!"
         # Get names endpoint
         elif path == '/getNames':
-            raise NotImplementedError()
-        
+            names = db.read_names()
+            for name in names:
+                if name == "":
+                    del names[names.index(name)]
+            output = {
+                "names": sorted(names),
+                "count": len(names)
+            }
         elif path == '/addName':
-            raise NotImplementedError()
+            body = json.loads(event["body"])
+            name = body["name"]
+            if db.write_name(name):
+                output = "Success"
+            else:
+                output = "Failure"
 
         return {
             "statusCode": 200,
