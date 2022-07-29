@@ -25,6 +25,7 @@ To run the test suite, call the function `python test.py`. It will tell you whic
 }
 ```
 Where `N` is the number of names in the list.
+
 5. Implement the logic for the endpoint `/addName`. This is a POST endpoint that takes a JSON object of the following form: 
 ```json
 {
@@ -32,6 +33,9 @@ Where `N` is the number of names in the list.
 }
 ```
 Where `new_name` is the new name to be added. The endpoint will call the database function `db.write_name()` to add the name to the database. If `write_name` is successful (i.e. it returns True), then the output should be "Success". Otherwise, the output should be "Failure".
+
+## Notes
+- Don't change any files other than app.py!
 
 ## Final challenge
 Once you have completed challenges 1-5, the final challenge has to do with pushing your changes to GitHub. The goal of this challenge is to create a new branch whose name is your name (e.g. if my name is Logan, I should create a branch called logan), commit your code, and then push it to origin. Once you have completed this challenge, please let your team leader know.
